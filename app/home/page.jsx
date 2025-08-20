@@ -14,8 +14,7 @@ export default function Home() {
   const [descricaoEditada, setDescricaoEditada] = useState("");
   const [user, setUser] = useState(null);
   const [signedUrls, setSignedUrls] = useState({});
-  const [conteudoAtivo, setConteudoAtivo] = useState("home"); // feed ou perfil
-
+  const [conteudoAtivo, setConteudoAtivo] = useState("home");
 
   useEffect(() => {
     async function getUser() {
@@ -27,7 +26,6 @@ export default function Home() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-
     window.location.href = "/login";
   };
 
@@ -45,15 +43,14 @@ export default function Home() {
     }
     carregaPosts();
 
-    const channel = supabase
+    const postsChannel = supabase
       .channel("posts-changes")
-      .on("postgres_changes", { event: "*", schema: "public", table: "posts" }, (payload) => {
+      .on("postgres_changes", { event: "*", schema: "public", table: "posts" }, payload => {
         if (payload.eventType === "INSERT") {
           setPosts(prev => [payload.new, ...prev]);
           if (payload.new.attachment_url) gerarSignedUrls([payload.new]);
         } else if (payload.eventType === "UPDATE") {
-          setPosts(prev => prev.map(p => p.id === payload.new.id ? payload.new : p));
-          if (payload.new.attachment_url) gerarSignedUrls([payload.new]);
+          setPosts(prev => prev.map(p => p.id === payload.new.id ? { ...p, ...payload.new } : p));
         } else if (payload.eventType === "DELETE") {
           setPosts(prev => prev.filter(p => p.id !== payload.old.id));
           setSignedUrls(prev => {
@@ -65,7 +62,43 @@ export default function Home() {
       })
       .subscribe();
 
-    return () => supabase.removeChannel(channel);
+    const likesChannel = supabase
+      .channel("likes-changes")
+      .on("postgres_changes", { event: "*", schema: "public", table: "post_likes" }, payload => {
+        setPosts(prev =>
+          prev.map(post => {
+            if (post.id === payload.new?.post_id || post.id === payload.old?.post_id) {
+              const likes = post.post_likes || [];
+              if (payload.eventType === "INSERT") return { ...post, post_likes: [...likes, payload.new] };
+              if (payload.eventType === "DELETE") return { ...post, post_likes: likes.filter(l => l.id !== payload.old.id) };
+            }
+            return post;
+          })
+        );
+      })
+      .subscribe();
+
+    const commentsChannel = supabase
+      .channel("comments-changes")
+      .on("postgres_changes", { event: "*", schema: "public", table: "post_comments" }, payload => {
+        setPosts(prev =>
+          prev.map(post => {
+            if (post.id === payload.new?.post_id || post.id === payload.old?.post_id) {
+              const comments = post.post_comments || [];
+              if (payload.eventType === "INSERT") return { ...post, post_comments: [...comments, payload.new] };
+              if (payload.eventType === "DELETE") return { ...post, post_comments: comments.filter(c => c.id !== payload.old.id) };
+            }
+            return post;
+          })
+        );
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(postsChannel);
+      supabase.removeChannel(likesChannel);
+      supabase.removeChannel(commentsChannel);
+    };
   }, []);
 
   async function gerarSignedUrls(postsArray) {
@@ -85,18 +118,9 @@ export default function Home() {
     if (!file) return null;
     const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}.${fileExt}`;
-    const filePath = fileName;
-
-    const { data, error } = await supabase.storage
-      .from('post_files')
-      .upload(filePath, file, { upsert: true });
-
-    if (error) {
-      console.log("Erro ao enviar arquivo:", error.message);
-      return null;
-    }
-
-    return filePath;
+    const { error } = await supabase.storage.from('post_files').upload(fileName, file, { upsert: true });
+    if (error) return null;
+    return fileName;
   }
 
   async function inserirPost(e) {
@@ -106,15 +130,12 @@ export default function Home() {
     let arquivoPath = null;
     if (arquivo) arquivoPath = await uploadArquivo(arquivo);
 
-    const { data, error } = await supabase
-      .from("posts")
-      .insert([{
-        titulo: novoTitulo,
-        descricao: novaDescricao,
-        user_id: user?.id,
-        attachment_url: arquivoPath
-      }])
-      .select();
+    const { data, error } = await supabase.from("posts").insert([{
+      titulo: novoTitulo,
+      descricao: novaDescricao,
+      user_id: user?.id,
+      attachment_url: arquivoPath
+    }]).select();
 
     if (!error) {
       setPosts(prev => [data[0], ...prev]);
@@ -129,14 +150,7 @@ export default function Home() {
 
   async function deletarPost(id) {
     const { error } = await supabase.from("posts").delete().eq("id", id).select();
-    if (!error) {
-      setPosts(prev => prev.filter(p => p.id !== id));
-      setSignedUrls(prev => {
-        const copy = { ...prev };
-        delete copy[id];
-        return copy;
-      });
-    }
+    if (!error) setPosts(prev => prev.filter(p => p.id !== id));
   }
 
   function editarPost(id, descricaoAtual) {
@@ -150,7 +164,6 @@ export default function Home() {
       .update({ descricao: descricaoEditada })
       .eq("id", id)
       .select();
-
     if (!error) {
       setPosts(prev => prev.map(post => post.id === id ? data[0] : post));
       setPostEditandoId(null);
@@ -174,22 +187,18 @@ export default function Home() {
     if (!texto.trim()) return;
     await supabase.from("post_comments").insert({ post_id: postId, user_id: user.id, comentario: texto });
   }
-  
-  
 
   return (
     <div className={styles.container}>
-      {/* Sidebar */}
       <aside className={styles.sidebar}>
         <h3>VirAll</h3>
         <ul>
-          <li onClick={() => setConteudoAtivo("feed")}>Noticias</li>
+          <li onClick={() => setConteudoAtivo("feed")}>Feed</li>
           <li onClick={() => setConteudoAtivo("perfil")}>Meu Perfil</li>
           <li onClick={handleLogout}>Sair</li>
         </ul>
       </aside>
 
-      {/* Conteúdo Principal */}
       <main className={styles.feed}>
         {conteudoAtivo === "feed" ? (
           <>
@@ -198,32 +207,7 @@ export default function Home() {
                 Criar Post
               </button>
             ) : (
-              <form onSubmit={async (e) => {
-                e.preventDefault();
-                if (!novoTitulo.trim() && !novaDescricao.trim() && !arquivo) return;
-
-                let arquivoPath = null;
-                if (arquivo) {
-                  const fileExt = arquivo.name.split('.').pop();
-                  const fileName = `${Date.now()}.${fileExt}`;
-                  const { data, error } = await supabase.storage.from('post_files').upload(fileName, arquivo, { upsert: true });
-                  if (!error) arquivoPath = fileName;
-                }
-
-                const { data, error } = await supabase.from("posts").insert([{
-                  titulo: novoTitulo,
-                  descricao: novaDescricao,
-                  user_id: user?.id,
-                  attachment_url: arquivoPath
-                }]).select();
-
-                if (!error) setPosts(prev => [data[0], ...prev]);
-
-                setNovoTitulo("");
-                setNovaDescricao("");
-                setArquivo(null);
-                setModoCriacaoAtivo(false);
-              }} className={styles.formulario}>
+              <form onSubmit={inserirPost} className={styles.formulario}>
                 <input placeholder="Título (opcional)" value={novoTitulo} onChange={e => setNovoTitulo(e.target.value)} />
                 <textarea placeholder="Descrição..." value={novaDescricao} onChange={e => setNovaDescricao(e.target.value)} />
                 <input type="file" accept=".jpg,.jpeg,.png,.pdf,.docx,.txt" onChange={e => setArquivo(e.target.files[0])} />
@@ -238,10 +222,7 @@ export default function Home() {
                   <h2>{post.titulo}</h2>
                   {postEditandoId === post.id ? (
                     <>
-                      <textarea
-                        value={descricaoEditada}
-                        onChange={e => setDescricaoEditada(e.target.value)}
-                      />
+                      <textarea value={descricaoEditada} onChange={e => setDescricaoEditada(e.target.value)} />
                       <button onClick={() => salvarEdicao(post.id)}>Salvar</button>
                       <button onClick={() => setPostEditandoId(null)}>Cancelar</button>
                     </>
@@ -249,24 +230,14 @@ export default function Home() {
                     <p>{post.descricao}</p>
                   )}
 
-
                   {post.attachment_url && signedUrls[post.id] && (
                     <div className={styles.postArquivo}>
-                      <a
-                        href={signedUrls[post.id]}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        📎 Ver arquivo
-                      </a>
+                      <a href={signedUrls[post.id]} target="_blank" rel="noopener noreferrer">📎 Ver arquivo</a>
                       {(post.attachment_url.endsWith(".png") ||
                         post.attachment_url.endsWith(".jpg") ||
                         post.attachment_url.endsWith(".jpeg")) && (
-                          <img
-                            src={signedUrls[post.id]}
-                            alt="Anexo"
-                          />
-                        )}
+                        <img src={signedUrls[post.id]} alt="Anexo" />
+                      )}
                     </div>
                   )}
 
@@ -277,35 +248,37 @@ export default function Home() {
                     </div>
                   )}
 
-                  <button onClick={() => toggleLike(post.id)}>
-                    {post.post_likes?.some(l => l.user_id === user?.id) ? "💖" : "🤍"}{" "}
-                    {post.post_likes?.length || 0}
-                  </button>
+                  <div className={styles.postFooter}>
+                    <div className={styles.postActions}>
+                      <button onClick={() => toggleLike(post.id)} className={styles.likeBtn}>
+                        {post.post_likes?.some(l => l.user_id === user?.id) ? "💖" : "🤍"} {post.post_likes?.length || 0}
+                      </button>
+                    </div>
 
-                  <ul>
-                    {post.post_comments?.map(c => (
-                      <li key={c.id}>{c.comentario}</li>
-                    ))}
-                  </ul>
+                    <ul className={styles.commentList}>
+                      {post.post_comments?.map(c => (
+                        <li key={c.id}>{c.comentario}</li>
+                      ))}
+                    </ul>
 
-                  <form
-                    onSubmit={e => {
-                      e.preventDefault();
-                      const input = e.target.elements.comentario;
-                      adicionarComentario(post.id, input.value);
-                      input.value = "";
-                    }}
-                    className={styles.commentForm}
-                  >
-                    <input name="comentario" placeholder="Escreva um comentário..." />
-                    <button type="submit">Comentar</button>
-                  </form>
+                    <form
+                      onSubmit={e => {
+                        e.preventDefault();
+                        const input = e.target.elements.comentario;
+                        adicionarComentario(post.id, input.value);
+                        input.value = "";
+                      }}
+                      className={styles.commentForm}
+                    >
+                      <input name="comentario" placeholder="Escreva um comentário..." />
+                      <button type="submit">Comentar</button>
+                    </form>
+                  </div>
                 </li>
               ))}
             </ul>
           </>
         ) : (
-          // Conteúdo do Perfil
           <UserProfile />
         )}
       </main>
