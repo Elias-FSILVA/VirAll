@@ -1,0 +1,38 @@
+.inputContainer {
+  display: flex;
+  align-items: center;
+  background-color: #f4f4f4;
+  padding: 10px 15px;
+  margin-bottom: 30px;
+  
+  /* Removido: width: 360px; */
+  /* Agora a largura será controlada pelo elemento pai, como .resetForm */
+  
+  box-sizing: border-box;
+  border-radius: 20px;
+  width: 100%; /* Adicionado para que ocupe o espaço total do contêiner pai */
+}
+
+.inputIcon {
+  margin-right: 10px;
+  color: #a0a0a0;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.inputField {
+  border: none;
+  outline: none;
+  flex-grow: 1;
+  font-size: 15px;
+  background-color: transparent;
+  color: #000000;
+  font-family: Poppins, sans-serif;
+}
+
+.inputField::placeholder {
+  color: #a0a0a0;
+}
+.inputField::placeholder {
+  color: #a0a0a0;
+}
