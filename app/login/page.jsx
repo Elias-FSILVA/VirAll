@@ -81,6 +81,7 @@ function LoginPage() {
     setErro(null);
     setSucesso(null);
 
+    // 1️⃣ Criar usuário no Auth
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password: senha,
@@ -99,21 +100,25 @@ function LoginPage() {
       return;
     }
 
+    // 2️⃣ Criar entrada na tabela profiles (mesmo nome da que seu UserProfile usa)
     const { error: insertError } = await supabase
-      .from("usuarios")
+      .from("profiles")
       .insert([{
         id: userId,
         email,
-        username,
+        username: username || `${nome}_${sobrenome}`.toLowerCase(),
         nome,
         sobrenome,
-        data_nascimento: dataNascimento
+        data_nascimento: dataNascimento,
+        avatar_url: "",
+        banner_url: "",
+        bio: ""
       }]);
 
     setLoading(false);
 
     if (insertError) {
-      setErro("Usuário criado no Auth, mas falha ao salvar no banco: " + insertError.message);
+      setErro("Usuário criado no Auth, mas falha ao salvar no profile: " + insertError.message);
     } else {
       setSucesso("Cadastro realizado com sucesso!");
       setModoCadastro(false);
@@ -125,6 +130,8 @@ function LoginPage() {
       setDataNascimento("");
     }
   }
+
+
 
   return (
     <>

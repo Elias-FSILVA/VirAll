@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from "react";
 import InputField from "@/components/InputField/InputField";
@@ -15,7 +15,7 @@ export default function EditProfilePage() {
   const [bannerUrl, setBannerUrl] = useState("");
   const [showAvatarOverlay, setShowAvatarOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const [description, setDescription] = useState("");
   const [password, setPassword] = useState("");
@@ -26,12 +26,12 @@ export default function EditProfilePage() {
   useEffect(() => {
     const getUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return router.push("/feed");
+      if (!session) return router.push("/home");
 
       setUser(session.user);
       setAvatarUrl(session.user.user_metadata?.avatar || "");
       setBannerUrl(session.user.user_metadata?.banner || "");
-      setName(session.user.user_metadata?.name || "");
+      setUsername(session.user.user_metadata?.username || "");
       setPhone(session.user.user_metadata?.phone || "");
       setDescription(session.user.user_metadata?.description || "");
     };
@@ -72,18 +72,28 @@ export default function EditProfilePage() {
       // Atualiza user_metadata
       const { error: userError } = await supabase.auth.updateUser({
         password: password || undefined,
-        data: { name, phone, avatar: avatarUrl, banner: bannerUrl, description }
+        data: { username, phone, avatar: avatarUrl, banner: bannerUrl, description }
       });
       if (userError) throw userError;
 
       // Upsert na tabela profiles
       const { error: profileError } = await supabase
         .from("profiles")
-        .upsert({ id: user.id, avatar: avatarUrl, banner: bannerUrl, description, phone, name });
+        .upsert(
+          {
+            id: user.id,
+            username,
+            phone,
+            avatar_url: avatarUrl,
+            banner_url: bannerUrl,
+            bio: description
+          },
+          { onConflict: 'id' }
+        );
       if (profileError) throw profileError;
 
       alert("Perfil atualizado com sucesso!");
-      router.push("/feed");
+      router.push("/userprofile");
     } catch (err) {
       console.error(err);
       setError("Erro ao atualizar perfil.");
@@ -140,9 +150,9 @@ export default function EditProfilePage() {
         <InputField
           icon={FaAddressBook}
           type="text"
-          placeholder="Nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
 
         <InputField

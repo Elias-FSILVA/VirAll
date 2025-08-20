@@ -326,6 +326,8 @@ body {
 .aboutSection {
   background-color: #e4ebec;
   padding: 80px 20px;
+  display: flex; 
+  justify-content: center;
 }
 
 .aboutContainer {
