@@ -29,11 +29,11 @@ export default function EditProfilePage() {
       if (!session) return router.push("/home");
 
       setUser(session.user);
-      setAvatarUrl(session.user.user_metadata?.avatar || "");
-      setBannerUrl(session.user.user_metadata?.banner || "");
+      setAvatarUrl(session.user.user_metadata?.avatar_url || "");
+      setBannerUrl(session.user.user_metadata?.banner_url || "");
       setUsername(session.user.user_metadata?.username || "");
       setPhone(session.user.user_metadata?.phone || "");
-      setDescription(session.user.user_metadata?.description || "");
+      setDescription(session.user.user_metadata?.bio || "");
     };
     getUser();
   }, [router]);
@@ -42,6 +42,7 @@ export default function EditProfilePage() {
 
   const handleFileUpload = async (file, type) => {
     if (!file) return;
+
     const fileExt = file.name.split(".").pop();
     const fileName = `${user.id}_${type}.${fileExt}`;
     const filePath = `${type}/${fileName}`;
@@ -52,9 +53,10 @@ export default function EditProfilePage() {
 
     if (uploadError) return alert("Erro ao enviar arquivo: " + uploadError.message);
 
-    const { publicURL } = supabase.storage.from("user-files").getPublicUrl(filePath);
-    if (type === "avatar") setAvatarUrl(publicURL);
-    else setBannerUrl(publicURL);
+    // Corrigido: usar data.publicUrl
+    const { data } = supabase.storage.from("user-files").getPublicUrl(filePath);
+    if (type === "avatar") setAvatarUrl(data.publicUrl);
+    else setBannerUrl(data.publicUrl);
   };
 
   const handleSubmit = async (e) => {
@@ -69,12 +71,17 @@ export default function EditProfilePage() {
     setLoading(true);
 
     try {
-      // Atualiza user_metadata
-      const { error: userError } = await supabase.auth.updateUser({
+      // Atualiza user_metadata (opcional)
+      await supabase.auth.updateUser({
         password: password || undefined,
-        data: { username, phone, avatar: avatarUrl, banner: bannerUrl, description }
+        data: {
+          username,
+          phone,
+          avatar_url: avatarUrl,
+          banner_url: bannerUrl,
+          bio: description
+        }
       });
-      if (userError) throw userError;
 
       // Upsert na tabela profiles
       const { error: profileError } = await supabase
@@ -90,6 +97,7 @@ export default function EditProfilePage() {
           },
           { onConflict: 'id' }
         );
+
       if (profileError) throw profileError;
 
       alert("Perfil atualizado com sucesso!");
