@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import styles from "./home.module.css";
 import UserProfile from "../userprofile/page.jsx";
 
-
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [novoTitulo, setNovoTitulo] = useState("");
@@ -175,6 +174,8 @@ export default function Home() {
     if (!texto.trim()) return;
     await supabase.from("post_comments").insert({ post_id: postId, user_id: user.id, comentario: texto });
   }
+  
+  
 
   return (
     <div className={styles.container}>
@@ -182,7 +183,7 @@ export default function Home() {
       <aside className={styles.sidebar}>
         <h3>VirAll</h3>
         <ul>
-          <li onClick={() => setConteudoAtivo("feed")}>Feed</li>
+          <li onClick={() => setConteudoAtivo("feed")}>Noticias</li>
           <li onClick={() => setConteudoAtivo("perfil")}>Meu Perfil</li>
           <li onClick={handleLogout}>Sair</li>
         </ul>

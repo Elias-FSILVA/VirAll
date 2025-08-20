@@ -101,7 +101,7 @@ export default function EditProfilePage() {
       if (profileError) throw profileError;
 
       alert("Perfil atualizado com sucesso!");
-      router.push("/userprofile");
+      router.replace("/home");
     } catch (err) {
       console.error(err);
       setError("Erro ao atualizar perfil.");
