@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  ;
+}
+
+.container {
+  max-width: 50%;
+  margin: 0 auto;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  /* espaço entre os campos */
+  margin-top: 2rem;
+}
+
+.campo input {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+button {
+  padding: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.lista-posts {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card-post {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 1rem;
+  background-color: #0000;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.titulo-post {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.descricao-post {
+  margin: 0;
+  color: #666;
+}
+
+.topo {
+  background-color: #000;
+  padding: 1.5rem;
+  color: #fff;
+}
+
+.title {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.menu-opcoes {
+  position: absolute;
+  right: 0;
+  top: 24px;
+  background: #000;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+}
+
+.menu-opcoes button {
+  padding: 8px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+
+.menu-opcoes button:hover {
+  background: #dcdcdc;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.edicao-post {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.edicao-post textarea {
+  resize: vertical;
+  padding: 8px;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.edicao-post button {
+  margin-right: 8px;
+  margin-top: 4px;
+}
+
+.btn-criar-post {
+  padding: 10px 16px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: background-color 0.2s ease;
+}
+
+.btn-criar-post:hover {
+  background-color: #0056b3;
+}
+
+.campo textarea {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+
+
+/* LOGIN */
+
+.login-container {
+  max-width: 30%;
+  margin: 4rem auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+/* Responsivo para telas menores */
+@media (max-width: 1024px) {
+  .login-container {
+    max-width: 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    max-width: 70%;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    max-width: 90%;
+    padding: 16px;
+  }
+}
+
+.login-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.login-form .form-group {
+  margin-bottom: 15px;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background-color: #111;
+  color: white;
+}
+
+.button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.button:hover {
+  background-color: #0059c1;
+}
+
+.error-text {
+  color: red;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+
+.success-text {
+  color: #4caf50;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #0070f3;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 14px;
+  padding: 0;
+}
