@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🦠 VirAll
 
-## Getting Started
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+![Next.js](https://img.shields.io/badge/Next.js-14-blue?logo=next.js)
+![Supabase](https://img.shields.io/badge/Supabase-DB%20%26%20Auth-3ECF8E?logo=supabase)
+![Status](https://img.shields.io/badge/status-Em%20Desenvolvimento-yellow)
+![Contribuições](https://img.shields.io/badge/contribuições-bem%20vindas!-blue)
 
-First, run the development server:
+> 🌐 Uma plataforma acadêmica para compartilhar **notícias de saúde**, promover **interação** e incentivar o **bem-estar** com tecnologia.
 
+---
+
+## 🚀 Funcionalidades
+- 🔐 **Autenticação de usuários** com Supabase e JWT  
+- 📰 **Feed de notícias de saúde** (filtradas de fontes confiáveis)  
+- 💬 **Comentários e curtidas** em publicações  
+- 📌 **Salvar posts** para ler depois  
+- 👤 **Perfil do usuário** (editar nome, avatar e senha)  
+- 📝 **Publicação de artigos/notícias** pela comunidade  
+- 📍 **Locais de atendimento de saúde** *(em breve)* sugestão de locais próximos  
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+<div align="center">
+
+![Next.js](https://img.shields.io/badge/Next.js-black?logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-black?logo=jsonwebtokens)
+
+</div>
+
+---
+
+## 📂 Estrutura do Projeto
+
+virall/
+├── app/ # Páginas do Next.js
+├── components/ # Componentes reutilizáveis
+├── api/ # Conexão com Supabase
+├── styles/ # Estilização
+└── README.md # Este arquivo
+
+
+---
+
+## ⚖️ LGPD & Segurança
+- 🔒 Senhas com **hash seguro**  
+- 🎫 Tokens de sessão com **JWT**  
+- 📜 Conformidade com **LGPD** para proteção de dados pessoais  
+
+---
+
+## 🎯 Objetivo
+Criar um ambiente confiável para **leitores, estudantes e profissionais da saúde** acompanharem novidades da área, interagirem e incentivarem hábitos saudáveis.
+
+---
+
+## 👨‍💻 Time
+Projeto desenvolvido por estudantes de **Ciência da Computação** para a **Semana Acadêmica de Informática**.
+Elias - Backend
+Guilherme - Design
+Kelly - Frontend
+Raphael - Backend
+
+---
+
+## 📌 Roadmap
+- [x] Autenticação com Supabase  
+- [x] Feed de notícias de saúde  
+- [x] Sistema de comentários e curtidas  
+- [ ] Página de perfil com edição de dados  
+- [ ] Locais próximos de Saúde 
+- [ ] Deploy público  
+
+---
+
+## 🏗️ Como rodar o projeto
 ```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/virall.git
+
+# Acesse a pasta
+cd virall
+
+# Instale as dependências
+npm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env
+
+# Rode em ambiente de desenvolvimento
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+---
+## 🤝 Contribuindo
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Contribuições são muito bem-vindas!
+Siga os passos:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Faça um fork 🍴
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Crie sua branch (git checkout -b feature/nova-feature)
 
-## Learn More
+Commit suas mudanças (git commit -m 'Adiciona nova feature')
 
-To learn more about Next.js, take a look at the following resources:
+Faça push (git push origin feature/nova-feature)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Abra um Pull Request 🚀
+---
+## 📜 Licença
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Distribuído sob a licença MIT. Veja LICENSE para mais informações.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+⭐ Se curtiu o projeto, não esquece de dar um Star aqui no GitHub!
