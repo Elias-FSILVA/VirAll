@@ -169,7 +169,6 @@ button {
   color: white;
 }
 
-/* Responsivo para telas menores */
 @media (max-width: 1024px) {
   .login-container {
     max-width: 50%;
