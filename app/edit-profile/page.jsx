@@ -53,7 +53,6 @@ export default function EditProfilePage() {
 
     if (uploadError) return alert("Erro ao enviar arquivo: " + uploadError.message);
 
-    // Corrigido: usar data.publicUrl
     const { data } = supabase.storage.from("user-files").getPublicUrl(filePath);
     if (type === "avatar") setAvatarUrl(data.publicUrl);
     else setBannerUrl(data.publicUrl);
@@ -71,7 +70,6 @@ export default function EditProfilePage() {
     setLoading(true);
 
     try {
-      // Atualiza user_metadata (opcional)
       await supabase.auth.updateUser({
         password: password || undefined,
         data: {
@@ -83,7 +81,6 @@ export default function EditProfilePage() {
         }
       });
 
-      // Upsert na tabela profiles
       const { error: profileError } = await supabase
         .from("profiles")
         .upsert(
@@ -116,13 +113,11 @@ export default function EditProfilePage() {
       <p className={styles.subtitle}>Modifique suas informações abaixo.</p>
 
       <div className={styles.profileHeader}>
-        {/* Banner */}
         <div
           className={styles.bannerContainer}
           style={{ backgroundImage: `url(${bannerUrl})` }}
           onClick={() => setShowBannerOverlay(true)}
         />
-        {/* Avatar */}
         <label className={styles.avatarLabel}>
           <div className={styles.avatarWrapper} onClick={() => setShowAvatarOverlay(true)}>
             {avatarUrl ? (
@@ -137,7 +132,6 @@ export default function EditProfilePage() {
         </label>
       </div>
 
-      {/* Modais de upload */}
       {showAvatarOverlay && (
         <div className={styles.avatarOverlay} onClick={() => setShowAvatarOverlay(false)}>
           <div className={styles.avatarModal} onClick={(e) => e.stopPropagation()}>

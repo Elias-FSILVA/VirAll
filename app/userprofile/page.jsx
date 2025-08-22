@@ -18,7 +18,6 @@ export default function UserProfile() {
 
       setUser(session.user);
 
-      // Pega dados do perfil
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('username, avatar_url, banner_url, bio')
@@ -26,7 +25,6 @@ export default function UserProfile() {
         .single();
       if (!profileError) setProfile(profileData);
 
-      // Conta posts do usuário
       const { count: postsCountResult, error: postsError } = await supabase
         .from('posts')
         .select('id', { count: 'exact', head: true })
@@ -34,7 +32,6 @@ export default function UserProfile() {
       if (postsError) console.error('Erro ao contar posts:', postsError);
       else setPostsCount(postsCountResult);
 
-      // Conta curtidas do usuário
       const { count: likesCountResult, error: likesError } = await supabase
         .from('likes')
         .select('*', { count: 'exact', head: true })

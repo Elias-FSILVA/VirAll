@@ -1,7 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
-/* ------------------- Variáveis ------------------- */
 :root {
   --primary-color: #b4dfd8;
   --text-color: #000000;
@@ -10,7 +9,6 @@
   --button-hover-bg: #166754;
 }
 
-/* ------------------- Globais ------------------- */
 body {
   margin: 0;
   padding: 0;
@@ -37,7 +35,6 @@ body {
   box-sizing: border-box;
 }
 
-/* ------------------- TopBar ------------------- */
 .topBar {
   position: fixed;
   top: 0;
@@ -99,7 +96,6 @@ body {
   background-color: transparent;
 }
 
-/* ------------------- Página de Login ------------------- */
 .loginPage {
   background-color: var(--primary-color);
   flex-direction: row;
@@ -252,7 +248,6 @@ body {
   margin-bottom: 15px;
 }
 
-/* ------------------- Página de Cadastro ------------------- */
 .registerPage {
   background-color: #003a3011;
   box-sizing: border-box;
@@ -322,7 +317,6 @@ body {
   margin-top: 10px;
 }
 
-/* ------------------- Sobre ------------------- */
 .aboutSection {
   background-color: #e4ebec;
   padding: 80px 20px;
@@ -413,7 +407,6 @@ body {
   transform: translate(-150px, -30px);
 }
 
-/* ------------------- Responsividade ------------------- */
 @media (max-width: 768px) {
   body {
     align-items: flex-start;
@@ -544,7 +537,6 @@ body {
   }
 }
 
-/* ------------------- Setinha inferior ------------------- */
 .downArrow {
   color: #0d5050;
   position: fixed;

@@ -23,5 +23,5 @@
 button:hover {
   background-color: #004d4d;
   transform: scale(1.01);
-  transition: font-size s ease; /* Transição suave */
+  transition: font-size s ease; 
 }

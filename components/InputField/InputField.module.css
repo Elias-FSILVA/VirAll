@@ -4,13 +4,9 @@
   background-color: #f4f4f4;
   padding: 10px 15px;
   margin-bottom: 30px;
-  
-  /* Removido: width: 360px; */
-  /* Agora a largura será controlada pelo elemento pai, como .resetForm */
-  
   box-sizing: border-box;
   border-radius: 20px;
-  width: 100%; /* Adicionado para que ocupe o espaço total do contêiner pai */
+  width: 100%;
 }
 
 .inputIcon {

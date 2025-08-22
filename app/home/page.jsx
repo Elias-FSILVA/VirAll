@@ -17,7 +17,7 @@ export default function Home() {
   const [conteudoAtivo, setConteudoAtivo] = useState("feed");
   const [news, setNews] = useState([]);
   const [noticiaAtiva, setNoticiaAtiva] = useState(null);
-  const NEWS_API_KEY = "2da842732868404189739503525ad8b6";
+  const NEWS_API_KEY = "(Coloque a chave da NEWSAPI aqui)";
 
   useEffect(() => {
     async function getUser() {
@@ -31,7 +31,7 @@ export default function Home() {
     if (conteudoAtivo === "news") {
       async function fetchNews() {
         try {
-          const res = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${NEWS_API_KEY}`);
+          const res = await fetch(`https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=${NEWS_API_KEY}`);
           const data = await res.json();
           setNews(data.articles || []);
         } catch (err) {

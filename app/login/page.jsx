@@ -81,7 +81,6 @@ function LoginPage() {
     setErro(null);
     setSucesso(null);
 
-    // 1️⃣ Criar usuário no Auth
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password: senha,
@@ -100,7 +99,6 @@ function LoginPage() {
       return;
     }
 
-    // 2️⃣ Criar entrada na tabela profiles (mesmo nome da que seu UserProfile usa)
     const { error: insertError } = await supabase
       .from("profiles")
       .insert([{
@@ -203,7 +201,6 @@ function LoginPage() {
           </div>
         </div>
 
-        {/* About Section permanece igual */}
         <div className={styles.aboutSection}>
           <div className={styles.aboutContainer}>
             <div className={styles.aboutTextContainer}>

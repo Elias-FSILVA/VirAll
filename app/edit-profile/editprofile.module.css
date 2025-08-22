@@ -1,5 +1,3 @@
-/* edit-profile/editprofile.module.css */
-
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
@@ -25,7 +23,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ------------------- Barra fixa no topo ------------------- */
 .topBar {
   position: fixed;
   top: 0;
@@ -232,7 +229,6 @@ body {
   margin-top: 5rem;
 }
 
-/* Estilo para o container de input para alinhar ícone e campo */
 .inputField {
   position: relative;
   width: 100%;
@@ -255,7 +251,6 @@ body {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Estilo do ícone dentro do input */
 .inputIcon {
   position: absolute;
   left: 15px;
@@ -266,7 +261,6 @@ body {
 }
 
 
-/* Estilo para a textarea de descrição */
 .textareaField {
   width: 100%;
   padding: 15px 15px 15px 45px;
