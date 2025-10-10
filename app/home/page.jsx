@@ -17,7 +17,7 @@ export default function Home() {
   const [conteudoAtivo, setConteudoAtivo] = useState("feed");
   const [news, setNews] = useState([]);
   const [noticiaAtiva, setNoticiaAtiva] = useState(null);
-  const NEWS_API_KEY = "(Coloque a chave da NEWSAPI aqui)";
+  const NEWS_API_KEY = "2da842732868404189739503525ad8b6";
 
   useEffect(() => {
     async function getUser() {
@@ -220,7 +220,6 @@ export default function Home() {
     </aside>
 
     <main className={styles.feed}>
-      {/* ===================== FEED ===================== */}
       {conteudoAtivo === "feed" && (
         <>
           {!modoCriacaoAtivo ? (
@@ -302,7 +301,6 @@ export default function Home() {
         </>
       )}
 
-      {/* ===================== NOTÍCIAS ===================== */}
       {conteudoAtivo === "news" && (
         <>
           <ul className={styles.listaPosts}>
@@ -327,7 +325,6 @@ export default function Home() {
         </>
       )}
 
-      {/* ===================== PERFIL ===================== */}
       {conteudoAtivo === "perfil" && <UserProfile />}
     </main>
   </div>
