@@ -17,7 +17,7 @@ export default function Home() {
   const [conteudoAtivo, setConteudoAtivo] = useState("feed");
   const [news, setNews] = useState([]);
   const [noticiaAtiva, setNoticiaAtiva] = useState(null);
-  const NEWS_API_KEY = "2da842732868404189739503525ad8b6";
+  const NEWS_API_KEY = process.env.NEWS_API_KEY;
 
   useEffect(() => {
     async function getUser() {
